@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
-import useAuth from "./hooks/useAuth";
+import useAuthContext from "./hooks/useAuthContext";
 
 export default function Login () {
     let history = useHistory();
-    let location = useLocation();
-    let auth = useAuth();
+    let authApi = useAuthContext();
 
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
@@ -16,17 +15,9 @@ export default function Login () {
         const formIsValid = formValidation();
         if (formIsValid) {
             // Mock authorization
-            // function doLogin () {
-            //     auth.signin(() => {
-            //         history.replace(from);
-            //     });
-            // }
-            // @todo redirection to "contacts"
-            // let { from } = location.state || { from: { pathname: "/" } };
-            auth.signin({login, password})
+            authApi.signIn({login, password})
                 .then(() => {
                     history.replace({pathname: "/contacts"});
-                    // history.replace(from);
                 });
         }
     }

@@ -20,20 +20,17 @@ export default function Contacts () {
     });
 
     // Fetching data
-    const [isLoaded, setLoaded] = useState(false);
     useEffect(() => {
         fetch('https://jsonplaceholder.typicode.com/users')
             .then((response) => response.json())
-            .then((data) => {
-                setLoaded(true);
-                setContacts(data);
-            })
+            .then((data) => setContacts(data))
             .catch((err) => console.error('Fetch error', err));
-    }, [isLoaded]);
+    }, []);
 
     // Computed filtered contacts list
     useEffect(() => {
-        setFilteredContacts(contacts.filter(contact => contact.name.search(new RegExp(searchString, 'gi')) !== -1));
+        setFilteredContacts(contacts.filter(contact =>
+            contact.name.search(new RegExp(searchString, 'gi')) !== -1));
     }, [contacts, searchString]);
 
     function onAdd () {
@@ -42,8 +39,7 @@ export default function Contacts () {
 
     function onAddConfirm (contact) {
         setModalsStates({...modalsStates, 'ADD': false});
-        const contactsCopy = [contact, ...contacts];
-        setContacts(contactsCopy);
+        setContacts([contact, ...contacts]);
     }
 
     function onEdit (e, contact) {
